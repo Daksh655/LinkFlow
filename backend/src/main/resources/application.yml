@@ -1,0 +1,41 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: LinkFlow
+
+  # Database configuration
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:linkflow}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  # JPA / Hibernate configuration
+  jpa:
+    hibernate:
+      ddl-auto: ${HIBERNATE_DDL_AUTO:update}
+    show-sql: ${HIBERNATE_SHOW_SQL:false}
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # Redis configuration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+
+# JWT configuration
+jwt:
+  secret: ${JWT_SECRET:super_secret_key_that_should_be_long_enough_for_hs256}
+  expiration: ${JWT_EXPIRATION:86400000} # 24 hours in milliseconds
+
+# Logging configuration
+logging:
+  level:
+    root: INFO
+    com.linkflow: ${LOG_LEVEL:DEBUG}
