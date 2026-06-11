@@ -4,6 +4,7 @@ import com.linkflow.auth.entity.User;
 import com.linkflow.cache.CacheService;
 import com.linkflow.common.exception.ResourceNotFoundException;
 import com.linkflow.common.exception.UnauthorizedAccessException;
+import com.linkflow.ratelimit.RateLimitService;
 import com.linkflow.url.dto.CreateUrlRequest;
 import com.linkflow.url.dto.UrlDashboardResponse;
 import com.linkflow.url.dto.UrlResponse;
@@ -23,12 +24,15 @@ public class UrlService {
 
     private final UrlRepository urlRepository;
     private final CacheService cacheService;
+    private final RateLimitService rateLimitService;
     
     private static final String ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final int SHORT_CODE_LENGTH = 6;
     private final SecureRandom random = new SecureRandom();
 
     public UrlResponse createUrl(CreateUrlRequest request, User authenticatedUser) {
+        
+        rateLimitService.checkAndConsumeLimit(authenticatedUser.getId());
         
         if (request.getCustomAlias() != null && !request.getCustomAlias().isBlank()) {
             if (urlRepository.existsByCustomAlias(request.getCustomAlias())) {
