@@ -31,7 +31,7 @@ spring:
 
 # JWT configuration
 jwt:
-  secret: ${JWT_SECRET:super_secret_key_that_should_be_long_enough_for_hs256}
+  secret: ${JWT_SECRET:bGlua2Zsb3dfc2VjcmV0X2tleV8xMjM0NTY3ODkwMTIzNDU2Nzg5MA}
   expiration: ${JWT_EXPIRATION:86400000} # 24 hours in milliseconds
 
 # Logging configuration
@@ -39,3 +39,4 @@ logging:
   level:
     root: INFO
     com.linkflow: ${LOG_LEVEL:DEBUG}
+    org.springframework.security: DEBUG
