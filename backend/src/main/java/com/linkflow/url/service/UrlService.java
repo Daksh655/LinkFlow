@@ -1,7 +1,10 @@
 package com.linkflow.url.service;
 
 import com.linkflow.auth.entity.User;
+import com.linkflow.common.exception.ResourceNotFoundException;
+import com.linkflow.common.exception.UnauthorizedAccessException;
 import com.linkflow.url.dto.CreateUrlRequest;
+import com.linkflow.url.dto.UrlDashboardResponse;
 import com.linkflow.url.dto.UrlResponse;
 import com.linkflow.url.entity.Url;
 import com.linkflow.url.repository.UrlRepository;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.SecureRandom;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +53,45 @@ public class UrlService {
                 .shortCode(finalCode)
                 .shortUrl("http://localhost:8080/" + finalCode)
                 .clickCount(savedUrl.getClickCount())
+                .build();
+    }
+
+    public List<UrlDashboardResponse> getUserUrls(User authenticatedUser) {
+        return urlRepository.findByUserIdOrderByCreatedAtDesc(authenticatedUser.getId())
+                .stream()
+                .map(this::mapToDashboardResponse)
+                .toList();
+    }
+
+    public UrlDashboardResponse getUrlDetails(Long urlId, User authenticatedUser) {
+        Url url = getUrlAndVerifyOwnership(urlId, authenticatedUser);
+        return mapToDashboardResponse(url);
+    }
+
+    public void deleteUrl(Long urlId, User authenticatedUser) {
+        Url url = getUrlAndVerifyOwnership(urlId, authenticatedUser);
+        urlRepository.delete(url);
+    }
+
+    private Url getUrlAndVerifyOwnership(Long urlId, User authenticatedUser) {
+        Url url = urlRepository.findById(urlId)
+                .orElseThrow(() -> new ResourceNotFoundException("URL not found"));
+
+        if (!url.getUser().getId().equals(authenticatedUser.getId())) {
+            throw new UnauthorizedAccessException("Access denied");
+        }
+        return url;
+    }
+
+    private UrlDashboardResponse mapToDashboardResponse(Url url) {
+        String finalCode = url.getCustomAlias() != null ? url.getCustomAlias() : url.getShortCode();
+        return UrlDashboardResponse.builder()
+                .id(url.getId())
+                .originalUrl(url.getOriginalUrl())
+                .shortCode(finalCode)
+                .shortUrl("http://localhost:8080/" + finalCode)
+                .clickCount(url.getClickCount())
+                .createdAt(url.getCreatedAt())
                 .build();
     }
 
