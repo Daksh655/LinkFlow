@@ -33,6 +33,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/cache/ping").permitAll()
                 .requestMatchers(HttpMethod.GET, "/{shortCode}").permitAll()
                 .requestMatchers("/api/urls/**").authenticated()
                 .requestMatchers("/api/analytics/**").authenticated()
