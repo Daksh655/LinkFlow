@@ -1,6 +1,7 @@
 package com.linkflow.url.service;
 
 import com.linkflow.auth.entity.User;
+import com.linkflow.cache.CacheService;
 import com.linkflow.common.exception.ResourceNotFoundException;
 import com.linkflow.common.exception.UnauthorizedAccessException;
 import com.linkflow.url.dto.CreateUrlRequest;
@@ -21,6 +22,7 @@ import java.util.List;
 public class UrlService {
 
     private final UrlRepository urlRepository;
+    private final CacheService cacheService;
     
     private static final String ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final int SHORT_CODE_LENGTH = 6;
@@ -70,6 +72,13 @@ public class UrlService {
 
     public void deleteUrl(Long urlId, User authenticatedUser) {
         Url url = getUrlAndVerifyOwnership(urlId, authenticatedUser);
+        
+        String finalCode = url.getCustomAlias() != null ? url.getCustomAlias() : url.getShortCode();
+        cacheService.removeCachedUrl(finalCode);
+        if (url.getCustomAlias() != null) {
+            cacheService.removeCachedUrl(url.getShortCode());
+        }
+        
         urlRepository.delete(url);
     }
 
