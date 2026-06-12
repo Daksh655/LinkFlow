@@ -18,4 +18,5 @@ public class UrlDashboardResponse {
     private String shortUrl;
     private Long clickCount;
     private LocalDateTime createdAt;
+    private LocalDateTime lastAccessed;
 }

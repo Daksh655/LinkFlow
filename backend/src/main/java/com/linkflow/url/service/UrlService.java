@@ -105,6 +105,7 @@ public class UrlService {
                 .shortUrl("http://localhost:8080/" + finalCode)
                 .clickCount(url.getClickCount())
                 .createdAt(url.getCreatedAt())
+                .lastAccessed(url.getLastAccessed())
                 .build();
     }
 

@@ -5,6 +5,24 @@ import AnalyticsModal from './AnalyticsModal';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
 import EmptyState from './EmptyState';
 
+const formatRelativeTime = (dateString) => {
+    if (!dateString) return 'Never Accessed';
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffSecs = Math.max(0, Math.floor((now - date) / 1000));
+    const diffMins = Math.floor(diffSecs / 60);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffSecs < 60) return 'Just now';
+    if (diffMins === 1) return '1 minute ago';
+    if (diffMins < 60) return `${diffMins} minutes ago`;
+    if (diffHours === 1) return '1 hour ago';
+    if (diffHours < 24) return `${diffHours} hours ago`;
+    if (diffDays === 1) return 'Yesterday';
+    return `${diffDays} days ago`;
+};
+
 const UrlCardList = ({ urls, setUrls, onUrlClicked }) => {
     const [copiedId, setCopiedId] = useState(null);
     const [analyticsModalState, setAnalyticsModalState] = useState({ isOpen: false, urlId: null });
@@ -63,7 +81,8 @@ const UrlCardList = ({ urls, setUrls, onUrlClicked }) => {
                                     {url.customAlias || url.shortCode}
                                 </h3>
                             </div>
-                            <span className="bg-[#14B8A6]/10 text-[#14B8A6] text-xs font-bold px-3 py-1.5 rounded-full border border-[#14B8A6]/20 shrink-0">
+                            <span className="bg-[#14B8A6]/10 text-[#14B8A6] text-xs font-bold px-3 py-1.5 rounded-full border border-[#14B8A6]/20 shrink-0 flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#14B8A6]"></span>
                                 Active
                             </span>
                         </div>
@@ -107,12 +126,18 @@ const UrlCardList = ({ urls, setUrls, onUrlClicked }) => {
                         <div className="flex justify-between items-center mb-6 pt-5 border-t border-[#262626]">
                             <div>
                                 <label className="block text-xs font-bold text-[#A3A3A3] uppercase tracking-widest mb-1.5">Clicks</label>
-                                <p className="text-[#FFFFFF] font-black text-xl">{url.clickCount}</p>
+                                <p className="text-[#FFFFFF] font-black text-xl">{url.clickCount} {url.clickCount === 1 ? 'Click' : 'Clicks'}</p>
                             </div>
                             <div className="text-right">
                                 <label className="block text-xs font-bold text-[#A3A3A3] uppercase tracking-widest mb-1.5">Created</label>
                                 <p className="text-[#FFFFFF] font-medium text-base">{new Date(url.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
                             </div>
+                        </div>
+
+                        {/* SECTION 4.5: Last Accessed */}
+                        <div className="mb-6">
+                            <label className="block text-xs font-bold text-[#A3A3A3] uppercase tracking-widest mb-1.5">Last Accessed</label>
+                            <p className="text-[#FFFFFF] font-medium text-sm">{formatRelativeTime(url.lastAccessed)}</p>
                         </div>
 
                         {/* SECTION 5: Action Buttons */}
