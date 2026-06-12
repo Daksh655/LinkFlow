@@ -24,12 +24,6 @@ const DashboardPage = () => {
 
     useEffect(() => {
         fetchUrls();
-
-        const interval = setInterval(() => {
-            fetchUrls();
-        }, 10000);
-
-        return () => clearInterval(interval);
     }, []);
 
     const handleUrlCreated = (newUrl) => {
