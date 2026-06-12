@@ -11,6 +11,7 @@ import com.linkflow.url.dto.UrlResponse;
 import com.linkflow.url.entity.Url;
 import com.linkflow.url.repository.UrlRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,6 +26,9 @@ public class UrlService {
     private final UrlRepository urlRepository;
     private final CacheService cacheService;
     private final RateLimitService rateLimitService;
+
+    @Value("${APP_BASE_URL}")
+    private String appBaseUrl;
     
     private static final String ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final int SHORT_CODE_LENGTH = 6;
@@ -57,7 +61,7 @@ public class UrlService {
                 .id(savedUrl.getId())
                 .originalUrl(savedUrl.getOriginalUrl())
                 .shortCode(finalCode)
-                .shortUrl("http://localhost:8080/" + finalCode)
+                .shortUrl(appBaseUrl + "/" + finalCode)
                 .clickCount(savedUrl.getClickCount())
                 .build();
     }
@@ -102,7 +106,7 @@ public class UrlService {
                 .id(url.getId())
                 .originalUrl(url.getOriginalUrl())
                 .shortCode(finalCode)
-                .shortUrl("http://localhost:8080/" + finalCode)
+                .shortUrl(appBaseUrl + "/" + finalCode)
                 .clickCount(url.getClickCount())
                 .createdAt(url.getCreatedAt())
                 .lastAccessed(url.getLastAccessed())
