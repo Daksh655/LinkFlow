@@ -7,49 +7,57 @@ const RegisterPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const { register } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
         try {
             await register({ name, email, password });
         } catch (err) {
             setError(err.response?.data?.message || 'Registration failed');
+            setLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-            <div className="bg-gray-800 p-8 rounded-lg shadow-xl w-full max-w-md">
-                <h2 className="text-3xl font-bold mb-6 text-center text-blue-400">Create Account</h2>
-                {error && <div className="bg-red-500/20 border border-red-500 text-red-300 p-3 rounded mb-4 text-sm text-center">{error}</div>}
-                <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="min-h-screen flex items-center justify-center bg-neutral-950 text-white selection:bg-teal-500/30 py-12">
+            <div className="bg-neutral-800 p-8 sm:p-10 rounded-2xl shadow-2xl border border-neutral-700 w-full max-w-md">
+                <div className="flex justify-center mb-6">
+                    <div className="w-12 h-12 bg-teal-500 rounded-xl flex items-center justify-center font-bold text-2xl shadow-lg shadow-teal-500/20">L</div>
+                </div>
+                <h2 className="text-3xl font-extrabold mb-8 text-center text-white tracking-tight">Create Account</h2>
+                
+                {error && <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-3.5 rounded-lg mb-6 text-sm text-center font-medium">{error}</div>}
+                
+                <form onSubmit={handleSubmit} className="space-y-5">
                     <div>
-                        <label className="block text-sm font-medium text-gray-400 mb-1">Full Name</label>
+                        <label className="block text-sm font-medium text-neutral-400 mb-1.5">Full Name</label>
                         <input 
                             type="text" 
-                            className="w-full bg-gray-700 border border-gray-600 rounded p-2.5 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                            className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-3 text-white focus:ring-1 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required 
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-400 mb-1">Email</label>
+                        <label className="block text-sm font-medium text-neutral-400 mb-1.5">Email Address</label>
                         <input 
                             type="email" 
-                            className="w-full bg-gray-700 border border-gray-600 rounded p-2.5 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                            className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-3 text-white focus:ring-1 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required 
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-400 mb-1">Password</label>
+                        <label className="block text-sm font-medium text-neutral-400 mb-1.5">Password</label>
                         <input 
                             type="password" 
-                            className="w-full bg-gray-700 border border-gray-600 rounded p-2.5 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                            className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-3 text-white focus:ring-1 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required 
@@ -58,13 +66,14 @@ const RegisterPage = () => {
                     </div>
                     <button 
                         type="submit" 
-                        className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded transition duration-200 mt-4"
+                        disabled={loading}
+                        className="w-full bg-teal-500 hover:bg-teal-600 disabled:bg-teal-500/50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition duration-200 mt-4 shadow-lg shadow-teal-500/20 flex justify-center items-center h-[52px]"
                     >
-                        Sign Up
+                        {loading ? <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div> : 'Sign Up'}
                     </button>
                 </form>
-                <div className="mt-6 text-center text-gray-400 text-sm">
-                    Already have an account? <Link to="/login" className="text-blue-400 hover:underline">Log in</Link>
+                <div className="mt-8 text-center text-neutral-400 text-sm font-medium">
+                    Already have an account? <Link to="/login" className="text-teal-500 hover:text-teal-600 transition ml-1">Sign in here</Link>
                 </div>
             </div>
         </div>

@@ -24,6 +24,8 @@ public class RedirectService {
         String cachedUrl = cacheService.getCachedUrl(shortCode);
         if (cachedUrl != null) {
             log.info("CACHE HIT: {}", shortCode);
+            // Execute analytics tracking directly in DB to maintain cache performance
+            urlRepository.incrementClickCount(shortCode, LocalDateTime.now());
             return cachedUrl;
         }
 
