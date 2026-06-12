@@ -59,6 +59,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
+            System.out.println("JWT ERROR:");
+            e.printStackTrace();
             // Log or handle invalid token exceptions gracefully
         }
         
