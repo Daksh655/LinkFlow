@@ -23,6 +23,7 @@ const DashboardPage = () => {
     };
 
     useEffect(() => {
+        console.log("Dashboard mounted");
         fetchUrls();
     }, []);
 
