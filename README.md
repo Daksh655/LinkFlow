@@ -6,7 +6,9 @@ A production-inspired URL shortening platform built with Spring Boot, React, Pos
 
 The system supports custom aliases, click analytics, Redis-based caching, and rate limiting to demonstrate scalable backend architecture concepts commonly used in modern web applications.
 
+
 <div align="center">
+
 
 ### Full Stack URL Shortener Platform
 
@@ -202,7 +204,6 @@ Benefits:
 
 ## Create URL
 
-<img src="./docs/create-url.png" alt="Create URL Screenshot" width="100%"/>
 <img width="100%" alt="Create URL Screenshot" src="https://github.com/user-attachments/assets/238c4fb4-3c08-4545-9a5b-58d0dd6ddd12" />
 
 
@@ -491,10 +492,8 @@ https://github.com/Daksh655
 
 ### LinkedIn
 
-https://linkedin.com/in/YOUR_LINKEDIN](https://www.linkedin.com/in/daksh-tiwari-723964361
+https://www.linkedin.com/in/daksh-tiwari-723964361
 
 ### Email
 
 daskh.tiwari655@gmail.com
-
----
